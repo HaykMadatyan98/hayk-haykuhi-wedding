@@ -9,6 +9,9 @@ import { nitro } from "nitro/vite";
 
 export default defineConfig({
   vite: {
+    server: {
+      allowedHosts:["localhost", "127.0.0.1", "0.0.0.0", "hayk-haykuhi-wedding.onrender.com"],
+    },
     plugins: [nitro()],
   },
 });

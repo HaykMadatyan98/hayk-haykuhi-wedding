@@ -19,17 +19,24 @@ Run: Docker Compose (Postgres + NestJS), npm dev (Vite frontend)
 cp .env.example .env
 cp backend/.env.example backend/.env
 
-# 2. Start backend + database
-docker compose up -d --build
+# 2. Start database
+docker compose up -d --build postgres
 # This starts:
 #   - postgres on localhost:5432
-#   - nestjs api on http://localhost:3001/api
 # On first start the seed runs automatically and creates an admin:
 #   email:    admin@example.com
 #   password: changeme123
 # (change these in .env BEFORE first start, or change them later in DB)
 
-# 3. Start frontend
+# 3. Start backend (choose one)
+# Option A: via Docker (recommended)
+#   docker compose up -d --build backend
+# Option B: run locally (requires Postgres from step 2)
+#   npm --prefix backend install
+#   npm --prefix backend run seed
+#   npm --prefix backend run start:dev
+
+# 4. Start frontend
 bun install
 bun dev
 # Open http://localhost:3000
@@ -58,6 +65,22 @@ docker-compose.yml Postgres + backend
 
 The frontend talks to the backend over REST. Configure `VITE_API_URL`
 in `.env` (default: `http://localhost:3001/api`).
+
+## 4.1 Run frontend and backend separately
+
+Frontend (from repo root):
+
+```bash
+npm install
+npm run dev:frontend
+```
+
+Backend (from repo root):
+
+```bash
+npm --prefix backend install
+npm run dev:backend
+```
 
 ## 5. API endpoints
 
