@@ -38,7 +38,7 @@ export function StackedGallery({ images }: { images: string[] }) {
               className="absolute w-[78vw] max-w-[420px] aspect-[3/4] object-cover rounded-3xl shadow-romantic border-4 border-card"
               style={{
                 transform: `translateY(${translateY}px) scale(${scale}) rotate(${rotate}deg)`,
-                opacity: 0.4 + localProgress * 0.6,
+                opacity: 0 + localProgress * 1,
                 zIndex: z,
                 transition: "opacity 200ms",
               }}

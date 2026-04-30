@@ -3,10 +3,35 @@ import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
 
+/**
+ * Normalize an origin for CORS comparisons.
+ * - Trims whitespace
+ * - Removes trailing slashes
+ */
+function normalizeOrigin(origin: string): string {
+  return origin.trim().replace(/\/+$/, "");
+}
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const allowedOrigins = (process.env.CORS_ORIGIN || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean)
+    .map(normalizeOrigin);
+
   app.enableCors({
-    origin: process.env.CORS_ORIGIN?.split(",") || "*",
+    origin(origin, callback) {
+      // Non-browser clients (curl/postman) may send no Origin header.
+      if (!origin) return callback(null, true);
+
+      // Some contexts (e.g. sandboxed iframes, file://) can send "null".
+      if (origin === "null") return callback(null, false);
+
+      const normalized = normalizeOrigin(origin);
+      const isAllowed = allowedOrigins.includes(normalized);
+      return callback(null, isAllowed);
+    },
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
