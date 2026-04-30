@@ -93,7 +93,7 @@ export function RsvpForm({ events, onDone }: { events: WeddingEvent[]; onDone: (
           <Label>Որ փուլերին կմասնակցեք</Label>
           <div className="space-y-2">
             {events.map((ev) => (
-              <label key={ev.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/50 cursor-pointer hover:bg-muted transition">
+              <label key={ev.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 cursor-pointer hover:bg-muted transition">
                 <Checkbox
                   checked={eventIds.includes(ev.id)}
                   onCheckedChange={(c) => setEventIds((prev) => (c ? [...prev, ev.id] : prev.filter((x) => x !== ev.id)))}
