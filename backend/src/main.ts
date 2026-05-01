@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
-
+import axios from "axios";
 /**
  * Normalize an origin for CORS comparisons.
  * - Trims whitespace
@@ -39,5 +39,16 @@ async function bootstrap() {
   const port = Number(process.env.PORT || 3001);
   await app.listen(port);
   console.log(`Wedding API listening on http://localhost:${port}`);
+  const RENDER_EXTERNAL_URL = `https://wedding-backend.onrender.com/api/health`;
+
+  setInterval(async () => {
+    try {
+      // Делаем запрос на собственный внешний URL
+      await axios.get(RENDER_EXTERNAL_URL);
+      console.log(`[Self-Ping] Success: ${new Date().toISOString()}`);
+    } catch (error) {
+      console.error(`[Self-Ping] Error: ${error.message}`);
+    }
+  }, 45000);
 }
 bootstrap();
